@@ -6,7 +6,8 @@ import ButtonComponent from '../shared/button';
 import { useParams } from "react-router-dom";
 
 interface IProps {
-    product:any
+    product:any;
+    match: any;
 }
 
 interface IState{
@@ -33,9 +34,10 @@ export default class ProductDetails extends React.Component<IProps, any>{
     }
     componentWillMount(){
         console.log("")
-        const search = window.location.search;
-        const params = new URLSearchParams(search);
-        const routeId = params.get('id');
+        // const search = window.location.search;
+        // const params = new URLSearchParams(search);
+        const { params } = this.props.match;
+        const routeId = params.id;
         this.state.products.filter((product:any)=>{
             return product.id==routeId
             
