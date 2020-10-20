@@ -1,8 +1,6 @@
 import React from 'react';
 import { LoginRequest } from '../models/user';
 import { connect } from 'react-redux';
-import { loginUser } from '../services/authService';
-
 
 interface IState {
     loginRequest: LoginRequest
@@ -28,7 +26,7 @@ class Login extends React.Component<any, IState>{
 
     handleSubmit(event: any) {
         event.preventDefault();
-        this.props.dispatch(loginUser(this.state.loginRequest));
+        //this.props.dispatch(loginUser(this.state.loginRequest));
         console.log(this.props);
     }
     render() {

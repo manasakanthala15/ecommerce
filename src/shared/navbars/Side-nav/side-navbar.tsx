@@ -1,10 +1,9 @@
 import React from 'react';
-import './top-navbar.css';
+import './side-navbar.css';
 import Cart from '../../../components/cart';
-import { Link } from "react-router-dom";
+
 interface IProps {
     navList: Array<any>
-    site:string
 }
 
 export default class TopNavBar extends React.Component<IProps, any>{
@@ -21,11 +20,10 @@ export default class TopNavBar extends React.Component<IProps, any>{
     
     render() {
         return (
-            <div className="navbar-fixed sticky-top bg-primary p-3">
-                <a>{this.props.site}</a>
-                <div className="topnav-right">
+            <div className="sidenav">
+                <div>
                 {this.props.navList.map((navItem:any)=>{
-                    return <Link to={`/${navItem}`}>{navItem}</Link>
+                    return <a onClick={()=>this.routeToPage(navItem)}>{navItem}</a>
                 })}
                 </div>          
             </div>
