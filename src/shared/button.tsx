@@ -16,7 +16,7 @@ export default class ButtonComponent extends React.Component<IProps, any>{
     }
     render() {
         return (
-            <Button variant="primary" className="mb-3" onClick={(event)=>this.handleEvent(event)}>
+            <Button variant="primary" onClick={(event)=>this.handleEvent(event)}>
                 {this.props.btnName}
             </Button>
         )

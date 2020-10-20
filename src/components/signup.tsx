@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { User } from '../models/user';
 import { connect } from 'react-redux';
-import { registerUser } from '../services/authService';
-
 
 interface IState {
     user: User
@@ -28,7 +26,7 @@ class Login extends React.Component<any, IState>{
 
     handleSubmit(event: any) {
         event.preventDefault();
-        this.props.dispatch(registerUser(this.state.user));
+        //this.props.dispatch(registerUser(this.state.user));
     }
     render() {
         return (

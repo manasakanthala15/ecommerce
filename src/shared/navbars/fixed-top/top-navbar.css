@@ -19,3 +19,7 @@
   .topnav-right{
       float: right;
   }
+  a{
+    color:white !important;
+    padding-right: 1rem;
+  }

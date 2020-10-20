@@ -1,54 +1,45 @@
 import React from 'react';
-import { Card, Row, Col } from 'react-bootstrap';
-import ButtonComponent from '../shared/button';
-import ProductDetails from '../components/productDetails';
-import { Redirect, Link } from 'react-router-dom';
+import CardComponent from '../shared/card/card';
+import { Product } from '../models/product';
+import { Row, Col } from 'react-bootstrap';
+import { connect, useDispatch } from 'react-redux';
+import { getProducts } from '../services/productService';
 
-interface IProps {
-    products: any
-}
 
 interface IState {
-    products: Array<any>
 }
 
-export default class Home extends React.Component<IProps, IState>{
+class Home extends React.Component<any, IState>{
     constructor(props: any) {
         super(props);
         this.state = {
-            products: this.props.products
+
         }
-        this.handleDetails=this.handleDetails.bind(this);
     }
 
-    handleDetails(product: any) {
-        return <Redirect to={`/details/${product.id}`} />
-    }
     handleSubmit(product: any) {
 
+    }
+    componentDidMount() {
+        this.props.dispatch(getProducts())
     }
     render() {
         return (
             <div className="m-4">
                 <Row>
-                    {this.state.products.map((product: any) => {
-                        return <Col sm={3}>
-                            <Card>
-                                <Card.Img variant="top" src={product.src} style={{ width: '15rem' }} />
-                                <Card.Body>
-                                    <Card.Title>
-                                        <Link to={`/details/${product.id}`}>{product.productName}</Link>
-                                    </Card.Title>
-                                    <Card.Text>
-                                        {product.description}
-                                    </Card.Text>
-                                </Card.Body>
-                            </Card>
-                        </Col>
-                    })}
+                    <Col>Sortby:<input type="text" /></Col>
                 </Row>
+                <CardComponent items={this.props.products} dispatch=""></CardComponent>
             </div>
 
         )
     }
 }
+const mapStateToProps = (state: any) => {
+    console.log(state.authReducer.products)
+    return {
+        products: state.authReducer.products
+    }
+}
+
+export default connect(mapStateToProps)(Home);

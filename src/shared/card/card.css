@@ -1,0 +1,10 @@
+.hidebtn {
+    display: none;
+} 
+
+.item-image:hover + .hidebtn {
+    display: block;
+    color: red;
+    position: absolute;
+    bottom: 0
+}
