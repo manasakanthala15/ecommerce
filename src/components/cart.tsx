@@ -1,6 +1,9 @@
 import React from 'react';
 import { Product } from '../models/product';
 import CardComponent from '../shared/card/card';
+import { connect } from 'react-redux';
+import { getCartItems } from '../services/cartService';
+
 
 interface IProps {
     cartItems:any
@@ -8,19 +11,30 @@ interface IProps {
 
 interface IState{
 }
-export default class Cart extends React.Component<IProps, IState>{
+class Cart extends React.Component<any, IState>{
     constructor(props: any) {
         super(props);
         this.state = {
             
         }
     }
-    
+    componentDidMount() {
+        debugger;
+        this.props.dispatch(getCartItems())
+    }
     render() {
         return (
             <div className="m-4">
-                <CardComponent items={this.props.cartItems} dispatch=""></CardComponent>
+                <CardComponent items={this.props.cartItems} isFavouriteNeeded={false}></CardComponent>
             </div>
         )
     }
 }
+const mapStateToProps = (state: any) => {
+    console.log(state.cartReducer.cartItems)
+    return {
+        cartItems: state.cartReducer.cartItems
+    }
+}
+
+export default connect(mapStateToProps)(Cart);
