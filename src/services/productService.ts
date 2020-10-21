@@ -1,5 +1,5 @@
 import { User, LoginRequest } from "../models/user";
-import { GetProducts } from "../actions/productactions";
+import { GetProducts,GetFilteredProducts } from "../actions/productactions";
 
 
 export const getProducts = () => {
@@ -14,6 +14,15 @@ export const getProducts = () => {
             const response = await handleError(res);
             console.log(res);
             dispatch(GetProducts(response));
+        }
+        catch (error) {
+        }
+    }
+}
+export const getfilteredItems = (filter:any) => {
+    return async (dispatch: any) => {
+        try {        
+            dispatch(GetFilteredProducts(filter));
         }
         catch (error) {
         }

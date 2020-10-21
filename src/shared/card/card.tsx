@@ -1,20 +1,22 @@
 import React from 'react';
-import { Button } from 'react-bootstrap';
 import { Row, Col, Card } from 'react-bootstrap';
 import { Product } from '../../models/product';
 import ButtonComponent from '../button';
 import './card.css';
 import { Link } from 'react-router-dom';
-import {addToCart} from '../../services/cartService'
+import { addToCart } from '../../services/cartService'
+import { connect } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 interface IProps {
     items: any;
-    dispatch:any
+    isFavouriteNeeded: boolean
 }
 
 interface IState {
     product: Product
 }
-export default class CardComponent extends React.Component<IProps, IState>{
+class CardComponent extends React.Component<any, IState>{
     constructor(props: any) {
         super(props);
         this.state = {
@@ -28,11 +30,16 @@ export default class CardComponent extends React.Component<IProps, IState>{
     render() {
         return (
             <Row>
+
                 {this.props.items.map((product: any) => {
                     return <Col sm={3}>
                         <Card>
-                            <button type="button" className="btn btn-primary" onClick={this.handleSubmit}></button>
-                            <div className="item-image"> <Card.Img variant="top" src={product.src} style={{ width: '15rem' }} /></div>
+                            {this.props.isFavouriteNeeded ?
+                                <i className="fas fa-heart" onClick={() => this.handleSubmit(product)}></i> : null
+                            }
+                            <div className="item-image">
+                                <Card.Img variant="top" src={product.src} style={{ width: '100%' }} />
+                            </div>
                             <div className="hidebtn">
                                 <Link to={`/productDetails/${product.id}`}>
                                     <ButtonComponent btnName="Quick Shop" btnSubmit={this.handleSubmit}></ButtonComponent>
@@ -45,7 +52,19 @@ export default class CardComponent extends React.Component<IProps, IState>{
                         </div>
                     </Col>
                 })}
+                {this.props.items.length == 0 ?
+                    <div>
+                        <p>No Items to display </p>
+                    </div> : null}
             </Row>
         )
     }
 }
+const mapStateToProps = (state: any) => {
+    console.log(state.cartReducer.products)
+    return {
+        products: state.cartReducer.products
+    }
+}
+
+export default connect(mapStateToProps)(CardComponent);
