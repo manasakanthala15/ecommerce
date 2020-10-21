@@ -14,7 +14,7 @@ export default class TopNavBar extends React.Component<IProps, any>{
     }
     routeToPage(navItem:any){
         console.log("cart")
-        if(navItem=="Cart"){
+        if(navItem=="cart"){
             
         }
     }
@@ -25,7 +25,7 @@ export default class TopNavBar extends React.Component<IProps, any>{
                 <a>{this.props.site}</a>
                 <div className="topnav-right">
                 {this.props.navList.map((navItem:any)=>{
-                    return <Link to={`/${navItem}`}>{navItem}</Link>
+                    return <Link to={`/app/${navItem}`}>{navItem}</Link>
                 })}
                 </div>          
             </div>

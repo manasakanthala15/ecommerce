@@ -6,9 +6,10 @@ import Cart from './components/cart';
 import ProductDetails from './shared/productDetails';
 
 export default () => (
-    <Router>
-        <Route exact path='/app' component={Dashboard} />
-        <Route exact path='/Cart' component={Cart} />
-        <Route exact path='/productDetails/:id' component={ProductDetails}/>
-    </Router>
+    <Dashboard></Dashboard>
+    // <Router>
+    //     <Route exact path='/app' component={Dashboard} />
+    //     {/* <Route exact path='/Cart' component={Cart} />
+    //     <Route exact path='/productDetails/:id' component={ProductDetails}/> */}
+    // </Router>
 );
