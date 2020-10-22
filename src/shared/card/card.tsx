@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import { addToCart } from '../../services/cartService'
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import '../../index.css';
 
 interface IProps {
     items: any;
@@ -35,16 +36,21 @@ class CardComponent extends React.Component<any, IState>{
                     return <Col sm={3}>
                         <Card>
                             {this.props.isFavouriteNeeded ?
-                                <i className="fas fa-heart" onClick={() => this.handleSubmit(product)}></i> : null
+                                <i className="fas fa-heart heart-icon" onClick={() => this.handleSubmit(product)}></i> : null
                             }
                             <div className="item-image">
-                                <Card.Img variant="top" src={product.src} style={{ width: '100%' }} />
-                            </div>
-                            <div className="hidebtn">
-                                <Link to={`/productDetails/${product.id}`}>
-                                    <ButtonComponent btnName="Quick Shop" btnSubmit={this.handleSubmit}></ButtonComponent>
+                                <Link to={`/app/productDetails/${product.id}`}>
+                                    <Card.Img variant="top" src={product.src} className="full-width" />
                                 </Link>
                             </div>
+                            <div className="hidebtn full-width bg-white">
+                                <Link to={`/app/productDetails/${product.id}`}>
+                                    <ButtonComponent btnName="Quick Shop" btnSubmit={() => this.handleSubmit(product)} variant="default"className="full-width btn-style"></ButtonComponent>
+                                </Link>
+                            </div>
+                            {this.props.quantityNeeded ?
+                                <div>{product.quantity}</div>: null
+                            }
                         </Card>
                         <div>
                             {product.productName}

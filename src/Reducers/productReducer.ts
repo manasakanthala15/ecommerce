@@ -1,15 +1,17 @@
 import { User } from "../models/user";
-import { GET_PRODUCTS,GET_Filtered_PRODUCTS } from "../actions/productactions";
+import { GET_PRODUCTS,GET_Filtered_PRODUCTS,GET_PRODUCT_BY_ID } from "../actions/productactions";
 import { Product } from "../models/product";
 
 const initialState = {
     products: [],
-    mockproducts:[]
+    mockproducts:[],
+    product:{}
 }
 
 export function productReducer(state = initialState, action: any) {
     switch (action.type) {
         case GET_PRODUCTS:
+            localStorage.setItem("Products",JSON.stringify(action.payload.products));
             return {
                 ...state,
                 products: action.payload.products,
@@ -18,7 +20,7 @@ export function productReducer(state = initialState, action: any) {
         case GET_Filtered_PRODUCTS:
             if(action.payload.filter!=""){
                 let filteredProducts=Array();
-                state.products.filter((item:any)=>{
+                state.mockproducts.filter((item:any)=>{
                     if(item.cost<action.payload.filter){
                         filteredProducts.push(item)
                     }
@@ -34,7 +36,17 @@ export function productReducer(state = initialState, action: any) {
                     products: state.mockproducts
                 }
             }
-            
+            case GET_PRODUCT_BY_ID:
+                let product={}
+                state.mockproducts.filter((item:any)=>{
+                    if(item.id==action.payload.productId){
+                        product=item;
+                    }
+                })
+                return {
+                    ...state,
+                    product:product
+                }
         default:
             return state
     }

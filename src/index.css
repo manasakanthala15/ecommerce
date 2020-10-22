@@ -11,6 +11,9 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-.btn-width{
-  width:100%
+.full-width{
+  width:100% !important;
+}
+.btn-style{
+  padding: 0px !important;
 }

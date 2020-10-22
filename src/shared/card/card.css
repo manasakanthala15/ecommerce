@@ -8,3 +8,8 @@
     position: absolute;
     bottom: 0
 }
+.heart-icon{
+    position: absolute;
+    right: 11px;
+    background-color: white;
+}

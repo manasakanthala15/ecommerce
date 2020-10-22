@@ -1,7 +1,5 @@
 import React from 'react';
 import CardComponent from '../shared/card/card';
-import { Product } from '../models/product';
-import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { getProducts } from '../services/productService';
 
@@ -17,10 +15,8 @@ class Home extends React.Component<any, IState>{
         }
     }
 
-    handleSubmit(product: any) {
-
-    }
     componentDidMount() {
+        localStorage.getItem("Products")
         this.props.dispatch(getProducts())
     }
     render() {

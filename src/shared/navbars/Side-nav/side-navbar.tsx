@@ -3,17 +3,25 @@ import './side-navbar.css';
 import Cart from '../../../components/cart';
 import { getfilteredItems } from '../../../services/productService';
 import { connect } from 'react-redux';
+import Slider from 'react-rangeslider'
 
 interface IProps {
     navList: Array<any>
     filters: Array<any>
     filterName: string
 }
+interface IState {
+    value: number;
+}
 
-class TopNavBar extends React.Component<any, any>{
+class TopNavBar extends React.Component<any, IState>{
     constructor(props: any) {
         super(props);
         this.routeToPage = this.routeToPage.bind(this);
+        this.state = {
+            value: 0
+        }
+        this.handleChange=this.handleChange.bind(this);
     }
     routeToPage(navItem: any) {
         console.log("cart")
@@ -22,10 +30,13 @@ class TopNavBar extends React.Component<any, any>{
         }
     }
 
-    handleChange(navItem: any, event: any) {
-        event.target.checked ? this.props.dispatch(getfilteredItems(navItem)) : this.props.dispatch(getfilteredItems(""))
-    }
+    
 
+    handleChange(event:any) {
+        this.setState({value: event.target.value});
+        this.props.dispatch(getfilteredItems(event.target.value))
+
+      }
     render() {
         return (
             <div className="sidenav">
@@ -34,22 +45,31 @@ class TopNavBar extends React.Component<any, any>{
                         return <a onClick={() => this.routeToPage(navItem)}>{navItem}</a>
                     })}
                 </div> */}
-                {this.props.filters.length != 0 ?
+                {/* {this.props.filters.length != 0 ?
                     <div>
                         <p>Filters</p>
                         <p>{this.props.filterName}</p>
                         {this.props.filters.map((navItem: any) => {
                             return <div>
-                                <input type="checkbox" id="vehicle1" name="vehicle1" value={navItem} onChange={(event: any) => this.handleChange(navItem, event)} />
+                                <input type="checkbox" id="vehicle1" name="vehicle1" value={navItem} onChange={(event: any) => this.handleChange(navItem)} />
                                 <label>{navItem}</label>
                             </div>
 
                         })}
                     </div>
                     : null
-                }
+                } */}
+                <div>{this.props.filterName}</div>
+                <input
+                    id="typeinp"
+                    type="range"
+                    min="100" max="5000"
+                    value={this.state.value}
+                    onChange={this.handleChange}
+                    step="500" />   
 
-            </div>
+            <div>{this.state.value}</div>         
+                    </div>
         )
     }
 }

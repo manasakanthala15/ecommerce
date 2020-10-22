@@ -25,7 +25,7 @@ class Cart extends React.Component<any, IState>{
     render() {
         return (
             <div className="m-4">
-                <CardComponent items={this.props.cartItems} isFavouriteNeeded={false}></CardComponent>
+                <CardComponent items={this.props.cartItems} isFavouriteNeeded={false} quantityNeeded={true}></CardComponent>
             </div>
         )
     }

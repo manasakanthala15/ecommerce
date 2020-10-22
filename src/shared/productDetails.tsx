@@ -1,5 +1,9 @@
 import React from 'react';
-import { Modal } from 'react-bootstrap';
+import { Modal, Row, Col } from 'react-bootstrap';
+import { getproductById } from '../services/productService';
+import { connect } from 'react-redux';
+import ButtonComponent from './button';
+import { addToCart } from '../services/cartService';
 
 interface IProps {
     cartItems: any
@@ -7,7 +11,7 @@ interface IProps {
 
 interface IState {
 }
-export default class Cart extends React.Component<IProps, IState>{
+class Cart extends React.Component<any, IState>{
     constructor(props: any) {
         super(props);
         this.state = {
@@ -15,23 +19,46 @@ export default class Cart extends React.Component<IProps, IState>{
         }
     }
 
+    componentWillMount() {
+        const { params } = this.props.match;
+        const productId = params.id;
+        this.props.dispatch(getproductById(productId));
+    }
+    handleSubmit(product:any){
+        this.props.dispatch(addToCart(product))
+    }
     render() {
         return (
-            <div className="m-4">
-                <Modal.Dialog>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Modal title</Modal.Title>
-                    </Modal.Header>
+            <Row className="m-4">
+                <Col sm={4}>
+                    <img src={this.props.product.src} style={{ width: "inherit" }}></img>
+                </Col>
+                <Col sm={8}>
+                    <Row>
+                        <Col sm={12}>
+                            <div>
+                                <p>{this.props.product.productName}</p>
+                                <p>{this.props.product.description}</p>
+                                <p>{this.props.product.cost}</p>
+                            </div>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col sm={12}>
+                        <ButtonComponent btnName="Add to Cart" variant="primary" btnSubmit={() => this.handleSubmit(this.props.product)}></ButtonComponent>
+                        </Col>
+                    </Row>
+                </Col>
+            </Row>
 
-                    <Modal.Body>
-                        <p>Modal body text goes here.</p>
-                    </Modal.Body>
-
-                    <Modal.Footer>
-                        {/* <Button variant="secondary">Close</Button>
-                        <Button variant="primary">Save changes</Button> */}
-                    </Modal.Footer>
-                </Modal.Dialog>            </div>
         )
     }
 }
+const mapStateToProps = (state: any) => {
+    return {
+        product: state.productReducer.product,
+        products: state.cartReducer.products
+    }
+}
+
+export default connect(mapStateToProps)(Cart);

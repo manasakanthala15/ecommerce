@@ -6,7 +6,7 @@ import Cart from './cart';
 import Home from './home';
 import { Product } from '../models/product'
 import { Col, Row } from 'react-bootstrap';
-import ProductDetails from './productDetails';
+import ProductDetails from '../shared/productDetails';
 
 interface IProps {
 
@@ -24,7 +24,7 @@ export default class Dashboard extends React.Component<IProps, IState>{
         super(props);
         this.state = {
             site: "Ecommerce",
-            rightnavItems: ["More", "Cart"],
+            rightnavItems: ["Cart"],
             items: ["Electronics", "Men", "Women"],
             filters: ["500", "100", "1500", "2000"]
         }

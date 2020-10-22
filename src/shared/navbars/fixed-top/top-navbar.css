@@ -23,3 +23,8 @@
     color:white !important;
     padding-right: 1rem;
   }
+  .cart-count{
+    position: absolute;
+    top: 10px;
+    color: yellow;
+  }
