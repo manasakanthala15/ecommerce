@@ -21,7 +21,7 @@ class TopNavBar extends React.Component<any, IState>{
         this.state = {
             value: 0
         }
-        this.handleChange=this.handleChange.bind(this);
+        this.handleChange = this.handleChange.bind(this);
     }
     routeToPage(navItem: any) {
         console.log("cart")
@@ -30,13 +30,14 @@ class TopNavBar extends React.Component<any, IState>{
         }
     }
 
-    
 
-    handleChange(event:any) {
-        this.setState({value: event.target.value});
-        this.props.dispatch(getfilteredItems(event.target.value))
 
-      }
+    handleChange(event: any) {
+        this.setState({ value: event.target.value });
+        const value=(event.target.value);
+        this.props.dispatch(getfilteredItems(value))
+
+    }
     render() {
         return (
             <div className="sidenav">
@@ -66,10 +67,10 @@ class TopNavBar extends React.Component<any, IState>{
                     min="100" max="5000"
                     value={this.state.value}
                     onChange={this.handleChange}
-                    step="500" />   
-
-            <div>{this.state.value}</div>         
-                    </div>
+                    step="500"
+                />
+                <div>{this.state.value}</div>
+            </div>
         )
     }
 }

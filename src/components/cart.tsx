@@ -19,13 +19,12 @@ class Cart extends React.Component<any, IState>{
         }
     }
     componentDidMount() {
-        debugger;
         this.props.dispatch(getCartItems())
     }
     render() {
         return (
             <div className="m-4">
-                <CardComponent items={this.props.cartItems} isFavouriteNeeded={false} quantityNeeded={true}></CardComponent>
+                <CardComponent items={this.props.cartItems} isFavouriteNeeded={true} quantityNeeded={true} removeFromCart={true}></CardComponent>
             </div>
         )
     }

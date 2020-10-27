@@ -8,8 +8,18 @@
     position: absolute;
     bottom: 0
 }
-.heart-icon{
+.colorwhite{
+    color: white;
+}
+.hearticon{
     position: absolute;
-    right: 11px;
-    background-color: white;
+    right: 17px;
+    top: 11px;
+    cursor: pointer;
+}
+.colorred{
+    color: red;
+}
+.view-all{
+    color: blue !important;
 }

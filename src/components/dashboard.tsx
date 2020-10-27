@@ -37,7 +37,7 @@ export default class Dashboard extends React.Component<IProps, IState>{
                 <TopNavBar navList={this.state.rightnavItems} site={this.state.site}></TopNavBar>
                 <Row>
                     <Col sm={2}>
-                        <SideNavBar navList={this.state.items} filters={this.state.filters} filterName="Below"></SideNavBar>
+                        <SideNavBar navList={this.state.items} filters={this.state.filters} filterName="Above"></SideNavBar>
                     </Col>
                     <Col sm={10}>
                         <Switch>

@@ -21,7 +21,7 @@ export function productReducer(state = initialState, action: any) {
             if(action.payload.filter!=""){
                 let filteredProducts=Array();
                 state.mockproducts.filter((item:any)=>{
-                    if(item.cost<action.payload.filter){
+                    if(item.cost>action.payload.filter){
                         filteredProducts.push(item)
                     }
                 })

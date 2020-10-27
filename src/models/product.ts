@@ -5,6 +5,7 @@ export class Product {
     description: string;
     cost: number;
     quantity:number;
+    isAddedToCart:boolean;
     constructor(args: any) {
         this.id = args.id
         this.src = args.src
@@ -12,6 +13,7 @@ export class Product {
         this.productName = args.productName
         this.cost = args.cost
         this.quantity = args.quantity
+        this.isAddedToCart=args.isAddedToCart
     }
 }
 export class ProductSpecification {
