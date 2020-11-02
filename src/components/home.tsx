@@ -2,27 +2,38 @@ import React from 'react';
 import CardComponent from '../shared/card/card';
 import { connect } from 'react-redux';
 import { getProducts } from '../services/productService';
-
+import InfiniteScrollComponent from '../shared/infiniteScroll'
+import Loader from 'react-loader-spinner'
 
 interface IState {
+    loading:boolean
 }
 
 class Home extends React.Component<any, IState>{
     constructor(props: any) {
         super(props);
         this.state = {
-
+            loading:true
         }
+        this.handleItems=this.handleItems.bind(this)
     }
 
-    componentDidMount() {
-        localStorage.getItem("Products")
-        this.props.dispatch(getProducts())
+    componentWillMount() {
+        //var x=localStorage.getItem(JSON.parse('Products')) || '[]'    
+        this.props.dispatch(getProducts(0))
+        // if(x.length>0){
+        //     this.setState({
+        //         loading:false
+        //     })
+        // }
+    }
+    handleItems(itemCount:any){
+        this.props.dispatch(getProducts(itemCount))
     }
     render() {
         return (
             <div className="m-4">
-                <CardComponent items={this.props.products} isFavouriteNeeded={true}></CardComponent>
+                <InfiniteScrollComponent content="card" items={this.props.products} scroll={this.handleItems}></InfiniteScrollComponent>
             </div>
 
         )

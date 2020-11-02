@@ -10,6 +10,9 @@ import '../../index.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart } from '@fortawesome/free-solid-svg-icons'
 import ProductDetails from '../../shared/productDetails';
+import InfiniteScrollComponent from '../infiniteScroll';
+import Loader from 'react-loader-spinner'
+
 interface IProps {
     items: any;
     isFavouriteNeeded: boolean
@@ -19,6 +22,10 @@ interface IState {
     product: Product,
     className: string,
     modal: boolean,
+    scrollItems: any
+    hasMoreScroll: boolean
+    allProducts: any
+    loading: boolean
 }
 class CardComponent extends React.Component<any, IState>{
     constructor(props: any) {
@@ -26,10 +33,16 @@ class CardComponent extends React.Component<any, IState>{
         this.state = {
             className: "hearticon colorwhite",
             modal: false,
-            product: new Product({})
+            product: new Product({}),
+            scrollItems: [],
+            hasMoreScroll: false,
+            allProducts: this.props.items,
+            loading: false
         }
         this.modalPopup = this.modalPopup.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.fetchData = this.fetchData.bind(this);
+        //this.handleItems = this.handleItems.bind(this);
     }
 
     addToCart(product: any) {
@@ -56,36 +69,62 @@ class CardComponent extends React.Component<any, IState>{
     productDetails(product: any) {
         localStorage.setItem("product", JSON.stringify(product))
     }
+    fetchData() {
+        var items = this.props.items.slice(this.state.scrollItems.length, this.state.scrollItems.length + 10)
+        if (items.length > 0) {
+            this.setState({
+                scrollItems: this.state.scrollItems.concat(...items),
+                hasMoreScroll: true,
+                loading: false
+            })
+        }
+        else {
+            this.setState({
+                hasMoreScroll: false
+            })
+        }
+
+    }
+    // handleItems(itemCount: any) {
+    //     this.props.scroll(itemCount)
+    // }
+    componentWillMount() {
+        this.setState({
+            loading: true
+        })
+        //this.fetchData();
+    }
     render() {
         return (
-            <Row>
-                {this.props.items.map((product: any) => {
-                    return <Col sm={3}>
-                        <Card>
-                            <FontAwesomeIcon icon={faHeart} className={product.isAddedToCart ? "hearticon colorred" : "hearticon colorwhite"} onClick={() => this.addToCart(product)} />
-                            <div className="item-image">
-                                <Link to={`/app/productDetails/${product.id}`}>
-                                    <Card.Img variant="top" src={product.src} className="full-width" onClick={() => this.productDetails(product)} />
-                                </Link>
+            <div>
+                <div className="row m-0">
+                    {this.props.items.map((product: any) => {
+                        return <Col sm={3}>
+                            <Card>
+                                <FontAwesomeIcon icon={faHeart} className={product.isAddedToCart ? "hearticon colorred" : "hearticon colorwhite"} onClick={() => this.addToCart(product)} />
+                                <div className="item-image">
+                                    <Link to={`/app/productDetails/${product.id}`}>
+                                        <Card.Img variant="top" src={product.src} className="full-width" onClick={() => this.productDetails(product)} />
+                                    </Link>
+                                </div>
+                                <div className="hidebtn full-width bg-white">
+                                    <ButtonComponent btnName="Quick Shop" btnSubmit={() => this.modalPopup(product)} variant="default" className="full-width btn-style"></ButtonComponent>
+                                </div>
+                                {/* {this.props.quantityNeeded ?
+                               <div>{product.quantity}</div> : null
+                                } */}
+                                {/* {this.props.removeFromCart ?
+                               <ButtonComponent btnName="Remove From Cart" btnSubmit={() => this.removeFromCart(product)} variant="default" className="full-width btn-style"></ButtonComponent>
+                                   :null
+                                } */}
+                            </Card>
+                            <div>
+                                {product.productName}
+                                <p>{product.cost}</p>
                             </div>
-                            <div className="hidebtn full-width bg-white">
-                                <ButtonComponent btnName="Quick Shop" btnSubmit={() => this.modalPopup(product)} variant="default" className="full-width btn-style"></ButtonComponent>
-                            </div>
-                            {/* {this.props.quantityNeeded ?
-                                <div>{product.quantity}</div> : null
-                            } */}
-                            {/* {this.props.removeFromCart ?
-                                <ButtonComponent btnName="Remove From Cart" btnSubmit={() => this.removeFromCart(product)} variant="default" className="full-width btn-style"></ButtonComponent>
-                                :null
-                            } */}
-                        </Card>
-                        <div>
-                            {product.productName}
-                            <p>{product.cost}</p>
-                        </div>
-                    </Col>
-                })}
-                {this.props.items.length == 0 ?
+                        </Col>
+                    })}
+                </div>                {this.props.items.length == 0 ?
                     <div>
                         <p>No Items to display </p>
                     </div> : null}
@@ -117,7 +156,7 @@ class CardComponent extends React.Component<any, IState>{
                     // </Modal>
                     : null
                 }
-            </Row>
+            </div>
         )
     }
 }

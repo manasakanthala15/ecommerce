@@ -17,3 +17,6 @@ code {
 .btn-style{
   padding: 0px !important;
 }
+.error{
+  color: red;
+}

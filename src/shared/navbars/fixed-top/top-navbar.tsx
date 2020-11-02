@@ -24,10 +24,10 @@ class TopNavBar extends React.Component<any, any>{
     render() {
         return (
             <div className="navbar-fixed sticky-top bg-primary p-3">
-                <a>{this.props.site}</a>
+                <a className="link-items">{this.props.site}</a>
                 <div className="topnav-right">
                 {this.props.navList.map((navItem:any)=>{
-                    return <Link to={`/app/${navItem}`}>{navItem}{this.props.cartItems.length!=0?
+                    return <Link className="link-items" to={`/app/${navItem}`}>{navItem}{this.props.cartItems.length!=0?
                     <span className="cart-count">{this.props.cartItems.length}</span>:null}</Link>
                 })}
                 </div>          

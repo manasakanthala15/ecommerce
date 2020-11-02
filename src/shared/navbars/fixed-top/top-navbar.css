@@ -19,7 +19,7 @@
   .topnav-right{
       float: right;
   }
-  a{
+  .link-items{
     color:white !important;
     padding-right: 1rem;
   }
