@@ -9,5 +9,7 @@ export default () => (
         <Route exact path='/signup' component={SignUp} />
         <Route exact path='/login' component={Login} />
         <Route exact path='/app' component={Dashboard} />
+        <Route exact path='/' component={Login} />
+        <Route exact path='/SignOut' component={Login} />
     </Router>
 );

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { User } from '../models/user';
 import { connect } from 'react-redux';
 import { Row, Col } from 'react-bootstrap';
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import ButtonComponent from '../shared/button';
 import { registerUser } from '../services/authService';
 
@@ -11,13 +11,13 @@ interface IState {
     user: User
     errors: any
 }
-const countErrors = (errors:any) => {
+const countErrors = (errors: any) => {
     let count = 0;
     Object.values(errors).forEach(
-      (val:any) => val.length > 0 && (count = count+1)
+        (val: any) => val.length > 0 && (count = count + 1)
     );
     return count;
-  }
+}
 const validEmailRegex = RegExp(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
 class Login extends React.Component<any, IState>{
     constructor(props: any) {
@@ -55,7 +55,7 @@ class Login extends React.Component<any, IState>{
                 break;
             case 'email':
                 errors.email =
-                value.length < 1 || !validEmailRegex.test(value)
+                    value.length < 1 || !validEmailRegex.test(value)
                         ? 'Email is not valid!'
                         : '';
                 break;
@@ -72,19 +72,21 @@ class Login extends React.Component<any, IState>{
             user: {
                 ...this.state.user, [event.target.name]: event.target.value
             },
-            errors:this.state.errors
+            errors: this.state.errors
         });
 
     }
 
-    handleSubmit(event:any) {
-        event.preventDefault();
-        this.props.dispatch(registerUser(this.state.user)); 
+    handleSubmit(event: any) {
+        if (countErrors(this.state.errors) == 0) {
+            event.preventDefault();
+            this.props.dispatch(registerUser(this.state.user));
+        }
     }
     render() {
         return (
             <div className="container">
-                <form className="col-8 m-auto">
+                <form className="col-6 m-auto">
                     <h3 className="text-center">Sign Up</h3>
                     <div className="form-group">
                         <label>User Name</label>
@@ -95,20 +97,20 @@ class Login extends React.Component<any, IState>{
 
                     <div className="form-group">
                         <label>Full Name</label>
-                        <input type="text" className="form-control" placeholder="Full name" value={this.state.user.lastName} name="fullname" onChange={this.handleChange}/>
+                        <input type="text" className="form-control" placeholder="Full name" value={this.state.user.lastName} name="fullname" onChange={this.handleChange} />
                         <span className='error'>{this.state.errors.fullName}</span>
 
                     </div>
 
                     <div className="form-group">
                         <label>Email address</label>
-                        <input type="email" className="form-control" placeholder="Enter email" value={this.state.user.email} name="email" onChange={this.handleChange}/>
+                        <input type="email" className="form-control" placeholder="Enter email" value={this.state.user.email} name="email" onChange={this.handleChange} />
                         <span className='error'>{this.state.errors.email}</span>
                     </div>
 
                     <div className="form-group">
                         <label>Password</label>
-                        <input type="password" className="form-control" placeholder="Enter password" value={this.state.user.password} name="password" onChange={this.handleChange}/>
+                        <input type="password" className="form-control" placeholder="Enter password" value={this.state.user.password} name="password" onChange={this.handleChange} />
                         <span className='error'>{this.state.errors.password}</span>
                     </div>
 
@@ -116,7 +118,11 @@ class Login extends React.Component<any, IState>{
                     <p className="forgot-password text-right">
                         Already registered <Link to="/login">Sign in?</Link>
                     </p>
-
+                    {
+                        this.props.auth?.registrationSuccess == true ?
+                            <Redirect to="/login" /> :
+                            null
+                    }
                 </form>
             </div>
         )

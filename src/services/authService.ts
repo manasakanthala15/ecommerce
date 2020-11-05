@@ -1,6 +1,6 @@
 import { User, LoginRequest } from "../models/user";
 import { authUrl } from "../resource";
-import { RegistrationSuccess, RegistrationFailed, LoginSuccess, LoginFailed } from "../actions/authActions";
+import { RegistrationSuccess, RegistrationFailed, LoginSuccess, LoginFailed,LogOut } from "../actions/authActions";
 
 export const registerUser = (user: User) => {
     return async (dispatch: any) => {
@@ -8,8 +8,7 @@ export const registerUser = (user: User) => {
             const url = authUrl + "/Register";
             const res = await fetch(url, {
                 method: 'POST',
-                headers: new Headers({ 'content-type': 'application/json','User-Agent':'PostmanRuntime/7.26.5','Accept' :'*/*',
-                'Accept-Encoding':'gzip, deflate, br','Connection':'keep-alive',"Access-Control-Allow-Origin":"https://"}),
+                headers: new Headers({ 'content-type': 'application/json'}),
                 body: JSON.stringify(user)
             })
             const response = await handleError(res);
@@ -27,20 +26,28 @@ export const loginUser = (credentials: LoginRequest) => {
             const url = authUrl + "/Login";
             const res = await fetch(url, {
                 method: 'POST',
-                headers: new Headers({'content-type': 'application/json','User-Agent':'PostmanRuntime/7.26.5','Accept' :'*/*',
-                'Accept-Encoding':'gzip, deflate, br','Connection':'keep-alive',"Access-Control-Allow-Origin":"*" }),
+                headers: new Headers({'content-type': 'application/json'}),
                 body: JSON.stringify(credentials)
             })
             const response = await handleError(res);
-            console.log(response.result);
-            dispatch(LoginSuccess(response.result.token, response.result));
+            console.log(response);
+            dispatch(LoginSuccess(response));
+            
         }
         catch (error) {
             dispatch(LoginFailed(error));
         }
     }
 }
-
+export const logout = () => {
+    return async (dispatch: any) => {
+        try { 
+            dispatch(LogOut());
+        }
+        catch (error) {
+        }
+    }
+}
 function handleError(response: Response) {
     if (!response.ok) {
         throw Error(response.statusText);

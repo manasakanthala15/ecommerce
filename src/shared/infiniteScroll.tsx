@@ -1,27 +1,19 @@
 import React from 'react';
-import { Row, Col, Card, Modal } from 'react-bootstrap';
 import './card/card.css';
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import '../index.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faHeart } from '@fortawesome/free-solid-svg-icons'
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Loader from 'react-loader-spinner'
 import ProductDetails from '../shared/productDetails';
-import { addToCart, removeFromCart } from '../services/cartService'
-import ButtonComponent from './button';
+import { addOrRemoveFromCart, removeFromCart } from '../services/cartService'
 import {Product } from '../models/product';
 import CardComponent from './card/card';
 
 interface IProps {
     items: any;
-    isFavouriteNeeded: boolean
-    htmlContent:any
 }
 
 interface IState {
-    scrollItems: any
     hasMoreScroll: boolean
     allProducts: any
     loading:boolean
@@ -33,7 +25,6 @@ class InfiniteScrollComponent extends React.Component<any, IState>{
     constructor(props: any) {
         super(props);
         this.state = {
-            scrollItems: [],
             hasMoreScroll: false  ,
             allProducts: this.props.items,
             loading:false,
@@ -47,7 +38,7 @@ class InfiniteScrollComponent extends React.Component<any, IState>{
         this.setState({
             className: "hearticon colorred"
         })
-        this.props.dispatch(addToCart(product))
+        this.props.dispatch(addOrRemoveFromCart(product))
     }
     removeFromCart(product: any) {
         this.props.dispatch(removeFromCart(product))
@@ -97,8 +88,8 @@ class InfiniteScrollComponent extends React.Component<any, IState>{
                     loader={this.state.loading?<Loader type="Circles"></Loader>:null}      
                 >
                    {this.props.content=="card"?
-                        <CardComponent items={this.props.products} methodname="getProducts" isFavouriteNeeded={true}></CardComponent>
-                     :null}
+                        <CardComponent items={this.props.items} isDashboard={false}></CardComponent>
+                     :<div></div>}
                 </InfiniteScroll>
             </div>
         )

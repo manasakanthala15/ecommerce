@@ -31,8 +31,8 @@ export function authReducer(state = initialState, action: any) {
             return {
                 ...state,
                 loginSuccess: true,
-                user: action.payload,
-                userToken: action.payload.userToken
+                user: action.payload.user.userName,
+                userToken: action.payload.user.userToken
             }
         case LOGIN_FAILED:
             return {

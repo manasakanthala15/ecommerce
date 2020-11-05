@@ -2,7 +2,7 @@ export const ADDORREMOVE_FROM_CART = "ADDORREMOVE_FROM_CART";
 export const GET_CART_ITEMS = "GET_CART_ITEMS";
 export const REMOVE_FROM_CART = "REMOVE_FROM_CART";
 
-export const AddToCart = (product: any) => ({
+export const AddOrRemoveFromCart = (product: any) => ({
     type: ADDORREMOVE_FROM_CART,
     payload: { product }
 })

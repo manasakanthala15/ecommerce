@@ -1,10 +1,10 @@
-import { AddToCart,GetCartItems,RemoveFromCart } from "../actions/cartActions";
+import { AddOrRemoveFromCart,GetCartItems,RemoveFromCart } from "../actions/cartActions";
 import { Product } from "../models/product";
 
-export const addToCart = (product:Product) => {
+export const addOrRemoveFromCart = (product:Product) => {
     return async (dispatch: any) => {
         try {        
-            dispatch(AddToCart(product));
+            dispatch(AddOrRemoveFromCart(product));
         }
         catch (error) {
         }

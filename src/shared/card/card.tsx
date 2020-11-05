@@ -4,25 +4,21 @@ import { Product } from '../../models/product';
 import ButtonComponent from '../button';
 import './card.css';
 import { Link } from 'react-router-dom';
-import { addToCart, removeFromCart } from '../../services/cartService'
+import { addOrRemoveFromCart, removeFromCart } from '../../services/cartService'
 import { connect } from 'react-redux';
 import '../../index.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart } from '@fortawesome/free-solid-svg-icons'
-import ProductDetails from '../../shared/productDetails';
-import InfiniteScrollComponent from '../infiniteScroll';
-import Loader from 'react-loader-spinner'
 
 interface IProps {
     items: any;
-    isFavouriteNeeded: boolean
+    isDashboard: boolean
 }
 
 interface IState {
     product: Product,
     className: string,
     modal: boolean,
-    scrollItems: any
     hasMoreScroll: boolean
     allProducts: any
     loading: boolean
@@ -34,26 +30,22 @@ class CardComponent extends React.Component<any, IState>{
             className: "hearticon colorwhite",
             modal: false,
             product: new Product({}),
-            scrollItems: [],
             hasMoreScroll: false,
             allProducts: this.props.items,
             loading: false
         }
         this.modalPopup = this.modalPopup.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.fetchData = this.fetchData.bind(this);
-        //this.handleItems = this.handleItems.bind(this);
+
     }
 
     addToCart(product: any) {
         this.setState({
             className: "hearticon colorred"
         })
-        this.props.dispatch(addToCart(product))
+        this.props.dispatch(addOrRemoveFromCart(product))
     }
-    removeFromCart(product: any) {
-        this.props.dispatch(removeFromCart(product))
-    }
+
     modalPopup(product: any) {
         this.setState({
             product: product,
@@ -69,66 +61,71 @@ class CardComponent extends React.Component<any, IState>{
     productDetails(product: any) {
         localStorage.setItem("product", JSON.stringify(product))
     }
-    fetchData() {
-        var items = this.props.items.slice(this.state.scrollItems.length, this.state.scrollItems.length + 10)
-        if (items.length > 0) {
-            this.setState({
-                scrollItems: this.state.scrollItems.concat(...items),
-                hasMoreScroll: true,
-                loading: false
-            })
-        }
-        else {
-            this.setState({
-                hasMoreScroll: false
-            })
-        }
 
-    }
-    // handleItems(itemCount: any) {
-    //     this.props.scroll(itemCount)
-    // }
     componentWillMount() {
         this.setState({
             loading: true
         })
-        //this.fetchData();
+    }
+    filterProductsList(collection: any) {
+
     }
     render() {
         return (
             <div>
                 <div className="row m-0">
-                    {this.props.items.map((product: any) => {
-                        return <Col sm={3}>
-                            <Card>
-                                <FontAwesomeIcon icon={faHeart} className={product.isAddedToCart ? "hearticon colorred" : "hearticon colorwhite"} onClick={() => this.addToCart(product)} />
-                                <div className="item-image">
-                                    <Link to={`/app/productDetails/${product.id}`}>
-                                        <Card.Img variant="top" src={product.src} className="full-width" onClick={() => this.productDetails(product)} />
-                                    </Link>
-                                </div>
-                                <div className="hidebtn full-width bg-white">
-                                    <ButtonComponent btnName="Quick Shop" btnSubmit={() => this.modalPopup(product)} variant="default" className="full-width btn-style"></ButtonComponent>
-                                </div>
-                                {/* {this.props.quantityNeeded ?
-                               <div>{product.quantity}</div> : null
-                                } */}
-                                {/* {this.props.removeFromCart ?
-                               <ButtonComponent btnName="Remove From Cart" btnSubmit={() => this.removeFromCart(product)} variant="default" className="full-width btn-style"></ButtonComponent>
-                                   :null
-                                } */}
-                            </Card>
-                            <div>
-                                {product.productName}
-                                <p>{product.cost}</p>
-                            </div>
-                        </Col>
-                    })}
-                </div>                {this.props.items.length == 0 ?
+                    <Col sm={12 }>
+                    {this.props.isDashboard ?
+                        <div className="row">
+                            {this.props.items.map((collection: any) => {
+                                return <Col sm={4}>
+                                    <Card>
+                                        <div>
+                                        <Link to={`/app/products/${collection.name}`}>{collection.name}</Link>
+                                        <Link to={`/app/products/${collection.name}`}>
+                                            <Card.Img variant="top" src={collection.src}/>
+                                        </Link>
+                                        </div>
+                                        
+                                    </Card>
+                                </Col>
+                               
+                            })}
+                        </div>
+                        :
+                        <div className="row">
+                            {this.props.items.map((item: any) => {
+                                return <Col sm={3}>
+                                    <Card>
+                                        <div>
+                                            <FontAwesomeIcon icon={faHeart} className={item.isAddedToCart ? "hearticon colorred" : "hearticon colorwhite"} onClick={() => this.addToCart(item)} />
+                                            <div className="item-image">
+                                                <Link to={`/app/productDetails/${item.id}`}>
+                                                    <Card.Img variant="top" src={item.src} className="full-width" onClick={() => this.productDetails(item)} />
+                                                </Link>
+                                            </div>
+                                            <div className="hidebtn full-width bg-white">
+                                                <ButtonComponent btnName="Quick Shop" btnSubmit={() => this.modalPopup(item)} variant="default" className="full-width btn-style"></ButtonComponent>
+                                            </div>
+                                        </div>
+                                    </Card>
+                                    <div>
+                                        {item.productName}
+                                        <p>{item.cost}</p>
+                                    </div>
+                                </Col>
+                            })}
+                        </div>
+                    }
+                    </Col>
+                    
+                </div>
+                {this.props.items.length == 0 ?
                     <div>
                         <p>No Items to display </p>
                     </div> : null}
-                {this.state.modal ?
+
+                {/* {this.state.modal ?
 
                     <Modal.Dialog centered style={{ position: "absolute", maxWidth: "1000px" }}>
                         <Modal.Header>
@@ -155,7 +152,7 @@ class CardComponent extends React.Component<any, IState>{
                     //     </Modal.Body>
                     // </Modal>
                     : null
-                }
+                } */}
             </div>
         )
     }
@@ -163,7 +160,7 @@ class CardComponent extends React.Component<any, IState>{
 const mapStateToProps = (state: any) => {
     console.log(state.cartReducer.products)
     return {
-        products: state.cartReducer.products
+        //products: state.cartReducer.products
     }
 }
 

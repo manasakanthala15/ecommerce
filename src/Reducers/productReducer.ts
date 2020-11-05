@@ -57,17 +57,18 @@ export function productReducer(state = initialState, action: any) {
     switch (action.type) {
         case GET_PRODUCTS:
             let items=state.allProducts.slice(action.count,action.count+10)
+            state.products.push(...items)
             //state.scrollItems.concat(...items)            
             return {
                 ...state,   
-                products:state.products.push(...items),
+                products:state.products,
                 mockproducts: state.products
             }
         case GET_Filtered_PRODUCTS:
             if(action.payload.filter!=""){
                 let filteredProducts=Array();
                 state.mockproducts.filter((item:any)=>{
-                    if(item.cost>action.payload.filter){
+                    if(item.cost>action.payload.filter.min && item.cost<action.payload.filter.max){
                         filteredProducts.push(item)
                     }
                 })

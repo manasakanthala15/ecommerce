@@ -7,9 +7,9 @@ export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 export const LOGIN_FAILED = "LOGIN_FAILED";
 export const LOGOUT = "LOGOUT"
 
-export const LoginSuccess = (userToken: userToken, user: any) => ({
+export const LoginSuccess = (user: any) => ({
     type: LOGIN_SUCCESS,
-    payload: { userToken, user }
+    payload: { user }
 })
 
 export const LogOut = () => ({

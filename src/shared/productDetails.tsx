@@ -3,7 +3,7 @@ import { Modal, Row, Col } from 'react-bootstrap';
 import { getproductById } from '../services/productService';
 import { connect } from 'react-redux';
 import ButtonComponent from './button';
-import { addToCart } from '../services/cartService';
+import { addOrRemoveFromCart } from '../services/cartService';
 import { Product } from '../models/product';
 
 interface IProps {
@@ -39,7 +39,7 @@ class Cart extends React.Component<any, IState>{
         
     }
     handleSubmit(product:any){
-        this.props.dispatch(addToCart(product))
+        this.props.dispatch(addOrRemoveFromCart(product))
     }
     render() {
         return (
@@ -70,8 +70,8 @@ class Cart extends React.Component<any, IState>{
 }
 const mapStateToProps = (state: any) => {
     return {
-        product: state.productReducer.product,
-        products: state.cartReducer.products
+        //product: state.productReducer.product,
+        //products: state.cartReducer.products
     }
 }
 

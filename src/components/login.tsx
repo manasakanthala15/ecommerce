@@ -1,13 +1,14 @@
 import React from 'react';
 import { LoginRequest } from '../models/user';
 import { connect } from 'react-redux';
-import { Link } from "react-router-dom";
+import { Link ,Redirect} from "react-router-dom";
 import ButtonComponent from '../shared/button';
 import { loginUser } from '../services/authService';
 
 interface IState {
     loginRequest: LoginRequest
-    errors: any
+    errors: any,
+    submitted:boolean
 }
 
 const countErrors = (errors: any) => {
@@ -25,7 +26,8 @@ class Login extends React.Component<any, IState>{
             errors: {
                 userName: '',
                 password: ''
-            }
+            },
+            submitted:false
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -37,8 +39,8 @@ class Login extends React.Component<any, IState>{
         switch (name) {
             case 'password':
                 errors.password =
-                    value.length < 8
-                        ? 'Password must be 8 characters long!'
+                    value.length < 1
+                        ? 'Password must be required!'
                         : '';
                 break;
             case 'userName':
@@ -59,29 +61,43 @@ class Login extends React.Component<any, IState>{
     }
 
     handleSubmit(event: any) {
+        this.setState({
+            submitted:true
+        })
+        if(countErrors(this.state.errors)==0){
         event.preventDefault();
         this.props.dispatch(loginUser(this.state.loginRequest));
+        }
     }
     render() {
         return (
             <div className="container">
-                <form className="col-8 m-auto">
+                <form className="col-6 m-auto">
                     <h3 className="text-center">Sign In</h3>
                     <div className="form-group">
                         <label>User name</label>
                         <input type="text" className="form-control" name="userName" placeholder="First name" value={this.state.loginRequest.userName} onChange={this.handleChange}/>
+                        <span className='error'>{this.state.errors.userName}</span>
                     </div>
 
                     <div className="form-group">
                         <label>Password</label>
                         <input type="password" className="form-control" name="password" placeholder="Enter password" value={this.state.loginRequest.password} onChange={this.handleChange} />
+                        <span className='error'>{this.state.errors.password}</span>
+
                     </div>
 
                     <ButtonComponent btnName="Sign In" btnSubmit={this.handleSubmit} variant="primary" className="col-12"></ButtonComponent>
                     <p className="forgot-password text-right">
                         Don't have an account <Link to="/signup">Sign Up?</Link>
                     </p>
-
+                    {
+                        this.props.auth?.loginSuccess == true ?
+                            <Redirect to="/app" /> :
+                            null
+                    }
+                    {this.state.submitted &&this.props.auth?.loginSuccess == false?
+                    <div><span className="error">Please Provide valid Credentials</span></div>:null}
                 </form>
             </div>
 

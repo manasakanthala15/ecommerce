@@ -3,7 +3,8 @@ import './side-navbar.css';
 import Cart from '../../../components/cart';
 import { getfilteredItems } from '../../../services/productService';
 import { connect } from 'react-redux';
-import Slider from 'react-rangeslider'
+import InputRange from 'react-input-range';
+import 'react-input-range/lib/css/index.css';
 
 interface IProps {
     navList: Array<any>
@@ -11,7 +12,7 @@ interface IProps {
     filterName: string
 }
 interface IState {
-    value: number;
+    value: any;
 }
 
 class TopNavBar extends React.Component<any, IState>{
@@ -19,12 +20,12 @@ class TopNavBar extends React.Component<any, IState>{
         super(props);
         this.routeToPage = this.routeToPage.bind(this);
         this.state = {
-            value: 0
+            value:  { min: 0, max: 2000 } ,
         }
         this.handleChange = this.handleChange.bind(this);
     }
     routeToPage(navItem: any) {
-        console.log("cart")
+        console.log("cart") 
         if (navItem == "Cart") {
 
         }
@@ -32,10 +33,9 @@ class TopNavBar extends React.Component<any, IState>{
 
 
 
-    handleChange(event: any) {
-        this.setState({ value: event.target.value });
-        const value=(event.target.value);
-        this.props.dispatch(getfilteredItems(value))
+    handleChange(event: any) { 
+        this.setState({ value: event });
+        this.props.dispatch(getfilteredItems(event))
 
     }
     render() {
@@ -60,25 +60,19 @@ class TopNavBar extends React.Component<any, IState>{
                     </div>
                     : null
                 } */}
-                <div>{this.props.filterName}</div>
-                <input
-                    id="typeinp"
-                    type="range"
-                    min="100" max="5000"
+                <div className="mb-4">{this.props.filterName}</div>
+                <InputRange
+                    maxValue={2000}
+                    minValue={0}
                     value={this.state.value}
                     onChange={this.handleChange}
-                    step="500"
-                />
-                <div>{this.state.value}</div>
+                    step={100} />
             </div>
         )
     }
 }
 const mapStateToProps = (state: any) => {
-    console.log(state.productReducer.products)
-    return {
-        cartItems: state.productReducer.products
-    }
+
 }
 
 export default connect(mapStateToProps)(TopNavBar);
