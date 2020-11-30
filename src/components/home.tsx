@@ -3,8 +3,9 @@ import SideNavBar from '../shared/navbars/Side-nav/side-navbar';
 import { Route, BrowserRouter as Router, Redirect, Switch } from 'react-router-dom';
 import { Col, Row } from 'react-bootstrap';
 import CardComponent from '../shared/card/card';
-import { getFilteredCollections } from '../services/collectionService';
+import { getFilteredCollections ,getAllCollections} from '../services/collectionService';
 import { connect } from 'react-redux';
+import InfiniteScrollComponent from '../shared/infiniteScroll';
 
 interface IProps {
 
@@ -46,12 +47,22 @@ class Home extends React.Component<any, IState>{
         }
     }
 
+    handleScroll(itemsCount:any){
+        const { params } = this.props.match;
+        const name = params.name;
+        this.props.dispatch(getFilteredCollections(name,itemsCount))
+    }
     componentWillMount() {
         const { params } = this.props.match;
         const name = params.name;
-        this.props.dispatch(getFilteredCollections(name))
+        this.props.dispatch(getFilteredCollections(name,0))
     }
 
+    componentDidUpdate(){
+        const { params } = this.props.match; 
+        const name = params.name;
+        this.props.dispatch(getFilteredCollections(name,0))
+    }
     render() {
         return (
             <Router>
@@ -61,7 +72,7 @@ class Home extends React.Component<any, IState>{
                             <SideNavBar navList={this.state.items} filters={this.state.filters} filterName="Price Range"></SideNavBar>
                         </Col>
                         <Col sm={10}>
-                            <CardComponent items={this.props.collection} isDashboard={false}></CardComponent>
+                            <InfiniteScrollComponent items={this.props.collection} isDashboard={false} scroll={(itemsCount:any)=>this.handleScroll(itemsCount)}></InfiniteScrollComponent>
                         </Col>
                     </div>
                 </div>

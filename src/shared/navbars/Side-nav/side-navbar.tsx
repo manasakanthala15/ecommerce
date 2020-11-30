@@ -1,7 +1,7 @@
 import React from 'react';
 import './side-navbar.css';
 import Cart from '../../../components/cart';
-import { getfilteredItems } from '../../../services/productService';
+import { getpricefilteredItems } from '../../../services/collectionService';
 import { connect } from 'react-redux';
 import InputRange from 'react-input-range';
 import 'react-input-range/lib/css/index.css';
@@ -35,7 +35,7 @@ class TopNavBar extends React.Component<any, IState>{
 
     handleChange(event: any) { 
         this.setState({ value: event });
-        this.props.dispatch(getfilteredItems(event))
+        this.props.dispatch(getpricefilteredItems(event))
 
     }
     render() {

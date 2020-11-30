@@ -4,13 +4,14 @@ import { connect } from 'react-redux';
 import '../index.css';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Loader from 'react-loader-spinner'
-import ProductDetails from '../shared/productDetails';
-import { addOrRemoveFromCart, removeFromCart } from '../services/cartService'
+import { addOrRemoveFromCart } from '../services/cartService'
 import {Product } from '../models/product';
 import CardComponent from './card/card';
 
 interface IProps {
     items: any;
+    isDashboard:boolean;
+    scroll:any;
 }
 
 interface IState {
@@ -40,9 +41,7 @@ class InfiniteScrollComponent extends React.Component<any, IState>{
         })
         this.props.dispatch(addOrRemoveFromCart(product))
     }
-    removeFromCart(product: any) {
-        this.props.dispatch(removeFromCart(product))
-    }
+   
     modalPopup(product: any) {
         this.setState({
             product: product,
@@ -75,21 +74,22 @@ class InfiniteScrollComponent extends React.Component<any, IState>{
         //     })
         // }
         this.props.scroll(this.props.items?this.props.items.length:0)
-
+        this.setState({
+            allProducts:this.props.items
+        })
     }
     
     render() {
         return (
-            <div>
+            <div key={this.props.items}>
                 <InfiniteScroll
-                    dataLength={this.props.items?.length} //This is important field to render the next data
+                    dataLength={this.state.allProducts?.length} //This is important field to render the next data
                     next={this.fetchData}
                     hasMore={true}
-                    loader={this.state.loading?<Loader type="Circles"></Loader>:null}      
+                    loader={this.state.loading?<Loader type="Circles"></Loader>:null
+                }      
                 >
-                   {this.props.content=="card"?
-                        <CardComponent items={this.props.items} isDashboard={false}></CardComponent>
-                     :<div></div>}
+                        <CardComponent items={this.state.allProducts} isDashboard={this.props.isDashboard} isCart={false}></CardComponent>
                 </InfiniteScroll>
             </div>
         )

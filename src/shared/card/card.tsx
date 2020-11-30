@@ -4,14 +4,14 @@ import { Product } from '../../models/product';
 import ButtonComponent from '../button';
 import './card.css';
 import { Link } from 'react-router-dom';
-import { addOrRemoveFromCart, removeFromCart } from '../../services/cartService'
+import { addOrRemoveFromCart,increaseOrDecreaseQuantity,getproductById } from '../../services/cartService'
 import { connect } from 'react-redux';
 import '../../index.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart } from '@fortawesome/free-solid-svg-icons'
 
 interface IProps {
-    items: any;
+    items: Array<Product>;
     isDashboard: boolean
 }
 
@@ -67,58 +67,69 @@ class CardComponent extends React.Component<any, IState>{
             loading: true
         })
     }
-    filterProductsList(collection: any) {
-
+    
+    incrementOrDecrementQuantity(item:any,type:any) {
+        this.props.dispatch(increaseOrDecreaseQuantity(item,type))
     }
+    
     render() {
         return (
             <div>
                 <div className="row m-0">
-                    <Col sm={12 }>
-                    {this.props.isDashboard ?
-                        <div className="row">
-                            {this.props.items.map((collection: any) => {
-                                return <Col sm={4}>
-                                    <Card>
-                                        <div>
-                                        <Link to={`/app/products/${collection.name}`}>{collection.name}</Link>
-                                        <Link to={`/app/products/${collection.name}`}>
-                                            <Card.Img variant="top" src={collection.src}/>
-                                        </Link>
-                                        </div>
-                                        
-                                    </Card>
-                                </Col>
-                               
-                            })}
-                        </div>
-                        :
-                        <div className="row">
-                            {this.props.items.map((item: any) => {
-                                return <Col sm={3}>
-                                    <Card>
-                                        <div>
-                                            <FontAwesomeIcon icon={faHeart} className={item.isAddedToCart ? "hearticon colorred" : "hearticon colorwhite"} onClick={() => this.addToCart(item)} />
-                                            <div className="item-image">
-                                                <Link to={`/app/productDetails/${item.id}`}>
-                                                    <Card.Img variant="top" src={item.src} className="full-width" onClick={() => this.productDetails(item)} />
+                    <Col sm={12}>
+                        {this.props.isDashboard ?
+                            <div className="row">
+                                {this.props.items.map((collection: any) => {
+                                    return <Col sm={4}>
+                                        <Card>
+                                            <div>
+                                                <Link to={`/app/products/${collection.name}`}>{collection.name}</Link>
+                                                <Link to={`/app/products/${collection.name}`}>
+                                                    <Card.Img variant="top" src={collection.src} />
                                                 </Link>
                                             </div>
-                                            <div className="hidebtn full-width bg-white">
-                                                <ButtonComponent btnName="Quick Shop" btnSubmit={() => this.modalPopup(item)} variant="default" className="full-width btn-style"></ButtonComponent>
+
+                                        </Card>
+                                    </Col>
+
+                                })}
+                            </div>
+                            :
+                            <div className="row">
+                                {this.props.items.map((item: any) => {
+                                    return <Col sm={3}>
+                                        <Card>
+                                            <div  key={item}>
+                                                <FontAwesomeIcon icon={faHeart} className={item.isAddedToCart ? "hearticon colorred" : "hearticon colorwhite"} onClick={() => this.addToCart(item)} />
+                                                <div className="item-image">
+                                                    <Link to={`/app/productDetails/${item.id}`}>
+                                                        <Card.Img variant="top" src={item.src} className="full-width" onClick={() => this.productDetails(item)} />
+                                                    </Link>
+                                                </div>
+                                                <div className="hidebtn full-width bg-white">
+                                                    <ButtonComponent btnName="Quick Shop" btnSubmit={() => this.modalPopup(item)} variant="default" className="full-width btn-style"></ButtonComponent>
+                                                </div>
                                             </div>
+                                        </Card>
+                                        <div>
+                                            {item.productName}
+                                            <p>{item.cost}</p>
                                         </div>
-                                    </Card>
-                                    <div>
-                                        {item.productName}
-                                        <p>{item.cost}</p>
-                                    </div>
-                                </Col>
-                            })}
-                        </div>
-                    }
+                                        {this.props.isCart ?
+                                            <div>
+                                                <input type="button" onClick={()=>this.incrementOrDecrementQuantity(item,"decrease")} value="-" />
+                                                <input type="text" name="quantity" value={item.quantity} id="number" />
+                                                <input type="button" onClick={()=>this.incrementOrDecrementQuantity(item,"increase")} value="+" />
+                                            </div>
+                                            : null
+                                        }
+
+                                    </Col>
+                                })}
+                            </div>
+                        }
                     </Col>
-                    
+
                 </div>
                 {this.props.items.length == 0 ?
                     <div>

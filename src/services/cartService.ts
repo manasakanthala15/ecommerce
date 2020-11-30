@@ -1,4 +1,4 @@
-import { AddOrRemoveFromCart,GetCartItems,RemoveFromCart } from "../actions/cartActions";
+import { AddOrRemoveFromCart,GetCartItems,IncreaseOrDecreaseQuantity ,GetProductById} from "../actions/cartActions";
 import { Product } from "../models/product";
 
 export const addOrRemoveFromCart = (product:Product) => {
@@ -20,10 +20,19 @@ export const getCartItems = () => {
         }
     }
 }
-export const removeFromCart=(product:any)=>{
+export const increaseOrDecreaseQuantity=(product:any,type:any)=>{
     return async (dispatch: any) => {
         try {        
-            dispatch(RemoveFromCart(product));
+            dispatch(IncreaseOrDecreaseQuantity(product,type));
+        }
+        catch (error) {
+        }
+    }
+}
+export const getproductById = (productId:any) => {
+    return async (dispatch: any) => {
+        try {        
+            dispatch(GetProductById(productId));
         }
         catch (error) {
         }
